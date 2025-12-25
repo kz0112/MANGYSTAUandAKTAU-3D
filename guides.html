@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Туристерге ақпарат | Mangystau Travel</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header header--simple">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">visit <b>MANGYSTAU</b></a>
+    <a class="header__back" href="index.html">← Басты бет</a>
+  </div>
+</header>
+
+<main class="pagePadTop">
+  <section class="infoTop">
+    <div class="container">
+      <h1 class="infoTop__title">Туристерге ақпарат</h1>
+
+      <div class="pillTabs" role="tablist" aria-label="Ақпарат санаттары">
+        <button class="pillTab is-active" data-tab="guides" role="tab" aria-selected="true">Гидтер</button>
+        <button class="pillTab" data-tab="operators" role="tab" aria-selected="false">Туроператорлар</button>
+        <button class="pillTab" data-tab="useful" role="tab" aria-selected="false">Пайдалы ақпарат</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Гидтер -->
+  <section class="container tabPane is-active" id="tab-guides" role=  "tabpanel">
+    <div class="gridCards" id="guidesGrid"></div>
+  </section>
+
+  <!-- Туроператорлар -->
+  <section class="container tabPane" id="tab-operators" role="tabpanel">
+    <div class="operatorsList" id="operatorsList"></div>
+  </section>
+
+  <!-- Пайдалы ақпарат -->
+  <section class="container tabPane" id="tab-useful" role="tabpanel" aria-labelledby="tabBtn-useful">
+    <div class="usefulBox">
+      <h2 class="usefulBox__title">Пайдалы ақпарат</h2>
+      <p class="usefulBox__desc">
+        Маңғыстау бағыттары көбіне ашық дала/тасты аймақтар арқылы өтеді. Күн ыстық, жел қатты болуы мүмкін,
+        ал кей локацияларда байланыс әлсірейді. Төмендегі кеңестер саяхатты қауіпсіз әрі жайлы етуге көмектеседі.
+      </p>
+  
+      <div class="usefulGrid">
+        <!-- 1 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Қауіпсіздік және денсаулық</h3>
+          <ul class="usefulList">
+            <li>Су: әр адамға күніне кемі 2–3 л (жазда 3–4 л) алып жүр.</li>
+            <li>Бас киім, күннен қорғайтын көзілдірік, SPF 30–50 крем міндетті.</li>
+            <li>Желге арналған сырт киім/жеңіл күрте: кешке салқындауы мүмкін.</li>
+            <li>Алғашқы көмек қобдишасы: бинт, пластырь, антисептик, ауырсынуға қарсы дәрі.</li>
+            <li>Кене/жәндікке қарсы құрал және жеке дәрілеріңді ұмытпа.</li>
+          </ul>
+        </div>
+  
+        <!-- 2 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Жол және көлік</h3>
+          <ul class="usefulList">
+            <li>Толық бак: алыс бағыттарға шыққанда міндетті түрде толық құйып ал.</li>
+            <li>Қосымша су/жанармай канистрі пайдалы (әсіресе шөлейт маршруттарда).</li>
+            <li>Дөңгелек: запаска, домкрат, баллон кілті, компрессор бар-жоғын тексер.</li>
+            <li>Навигация: карта offline жүктеп қой (байланыс әлсіз болуы мүмкін).</li>
+            <li>Құм/қиыршықта жылдамдықты азайт, резкі бұрылыс жасама.</li>
+          </ul>
+        </div>
+  
+        <!-- 3 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Байланыс және құжаттар</h3>
+          <ul class="usefulList">
+            <li>Телефон толық заряд + powerbank (кемі 10 000 mAh).</li>
+            <li>Бағытты жақындарыңа алдын ала жіберіп қой (қайда/қашан қайтасың).</li>
+            <li>Жеке куәлік және қажет болса жүргізуші құжатыңды өзіңмен ал.</li>
+            <li>Топпен шықсаң: жетекші/жауапты адам және байланыс тәртібін белгіле.</li>
+          </ul>
+        </div>
+  
+        <!-- 4 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Табиғатты сақтау</h3>
+          <ul class="usefulList">
+            <li>Қоқысты өзіңмен бірге алып кет: пакет/қап дайында.</li>
+            <li>От жақсаң: қауіпсіз жерде ғана, міндетті түрде толық өшір.</li>
+            <li>Жартастарға жазу жазба, табиғи нысандарды сындырма/алма.</li>
+            <li>Жабайы жануарларға жақындама, ұя/індерді мазалама.</li>
+          </ul>
+        </div>
+  
+        <!-- 5 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Фото және дрон</h3>
+          <ul class="usefulList">
+            <li>Желді ауа райын ескер: дрон ұшыру қиын/қауіпті болуы мүмкін.</li>
+            <li>Таңғы/кешкі “алтын сағатта” кадр өте әдемі шығады.</li>
+            <li>Құм/шаңнан камераны қорға: микрофибра, қап, фильтр қолдан.</li>
+            <li>Адамдар бар жерде түсірсең — рұқсат сұраған дұрыс.</li>
+          </ul>
+        </div>
+  
+        <!-- 6 -->
+        <div class="usefulCard">
+          <h3 class="usefulCard__title">Киім және аяқ киім</h3>
+          <ul class="usefulList">
+            <li>Трекингке ыңғайлы аяқ киім: табаны сырғымайтын кроссовка/ботинка.</li>
+            <li>Жеңі ұзын жеңіл киім күннен қорғайды (тері күймейді).</li>
+            <li>Құмды жерге: жабық аяқ киім + қосымша шұлық ыңғайлы.</li>
+            <li>Кешке салқын болуы мүмкін — жылы кофта алып жүр.</li>
+          </ul>
+        </div>
+      </div>
+  
+      <div class="usefulNote">
+        <strong>Ескерту:</strong> Егер маршрут алыс/қиын болса (сор, құм, ұзақ оффроуд),
+        гидпен немесе тәжірибелі жүргізушімен шыққан дұрыс.
+      </div>
+      <div class="usefulNote">
+        Ақтауда он бір қоғамдық көлік бағыты (1, 2, 3, 4, 5, 7, 8, 11, 103, 105, 106) жұмыс істейді, жолақысы 70 теңгеден басталады.
+
+        Ақтау халықаралық әуежайы (әуежай қаладан 25 км қашықтықта орналасқан. Әуежайға дейін №11 автобус және такси қызмет көрсетеді);
+        Теңіз порты;
+        Автобус;
+        Такси.
+        Қалада теміржол вокзалы жоқ. Пойыздар Маңғыстау станциясына келеді. №105 автобус және такси қала мен Маңғыстау станциясы арасында 20 км қашықтықта жүреді.
+    </div>
+  </section>
+  
+</main>
+
+<script src="js/guides.js"></script>
+</body>
+</html>

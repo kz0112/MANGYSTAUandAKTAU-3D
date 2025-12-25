@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Көкала урочищесі | Mangystau Travel</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header header--simple">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">visit <b>MANGYSTAU</b></a>
+    <a class="header__back" href="tours.html">← Маршруттарға қайту</a>
+  </div>
+</header>
+
+<main id="tourPage">
+
+  <!-- HERO -->
+  <section class="tourHero2">
+    <div class="tourHero2__bg"
+         style="background-image:url('https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG')"></div>
+    <div class="tourHero2__overlay"></div>
+
+    <!-- декоратив wave -->
+    <svg class="tourHero2__wave" viewBox="0 0 1200 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M30 95 C 160 25, 260 150, 390 85 C 520 20, 610 150, 730 85 C 860 20, 960 150, 1110 70"
+        stroke="rgba(255,255,255,.25)" stroke-width="2" />
+      <circle cx="390" cy="85" r="9" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.25)" />
+      <circle cx="730" cy="85" r="9" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.25)" />
+      <circle cx="1110" cy="70" r="9" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.25)" />
+    </svg>
+
+    <div class="container tourHero2__content">
+      <h1 class="tourHero2__title">Көкала урочищесі</h1>
+
+      <p class="tourHero2__desc">
+        Маңғыстаудың ерекше жартас мүсіндері мен табиғи қабаттары сақталған көрнекті орын.
+        Мұнда фотосессия, серуен және тыныш табиғат атмосферасын сезіну өте әсерлі.
+      </p>
+
+      <div class="tourHero2__row">
+        <div class="badgeLine">
+          <span class="badgeLine__dot">⦿</span>
+          <div>
+            <div style="font-weight:800">Орналасуы</div>
+            <div style="opacity:.85">Маңғыстау облысы, Түпқараған ауданы (бағытты кейін нақтылайсың)</div>
+          </div>
+        </div>
+
+        <!-- Видео сілтемесін өзің қоясың -->
+        <a class="playBtn" href="#" target="_blank" rel="noopener">
+          <span class="playBtn__icon">▶</span>
+          Бейнені көру
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO (WHITE) -->
+  <section class="tourBody2">
+    <div class="container tourInfoGrid">
+
+      <div class="tourInfoGrid__left">
+        <h2>Көкала урочищесі</h2>
+        <p>
+          Бұл орын Маңғыстаудың әсем табиғаты мен ерекше геологиялық бедерін көрсететін
+          тамаша нүктелердің бірі. Жартастардың пішіні, қабаттардың түсі және кең көкжиек —
+          бәрі бір кадрға сыяды.
+        </p>
+      </div>
+
+      <div class="tourInfoGrid__right">
+        <p>
+          <b>Қысқаша сипаттама:</b> Көкала урочищесі – шөлейт аймақта орналасқан жартас массивтері мен
+          түрлі қабатты табиғи бедерлерден тұратын аймақ. Мұнда жел мен уақыт қалыптастырған
+          ерекше мүсіндер, тар сайлар және ашық кеңістік көп.
+          <br><br>
+          <b>Неге бару керек:</b> фотоға өте әдемі; күн батар шақта реңктері өзгереді; жеңіл серуен жасауға болады.
+          <br><br>
+          <b>Кеңес:</b> су, бас киім және ыңғайлы аяқ киім алып жүр. Жел күшейсе, көзілдірік пайдалы.
+          <br><br>
+          <b>Маусым:</b> көктем/күз — ең қолайлы (жазда ыстық болады).
+          <br><br>
+          <b>Қауіпсіздік:</b> жартастың жиегіне жақындама, топпен жүрген дұрыс, байланыс әлсіреуі мүмкін.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery">
+    <div class="container">
+
+      <div class="kicker2">
+        <span class="kicker2__line"></span>
+        <span>Маңғыстау – шабыт пен тынығу</span>
+      </div>
+
+      <div class="galleryHead">
+        <h3>Фотогалерея</h3>
+        <div class="galleryBtns">
+          <button class="galleryBtn" id="gPrev" aria-label="Алдыңғы">←</button>
+          <button class="galleryBtn galleryBtn--primary" id="gNext" aria-label="Келесі">→</button>
+        </div>
+      </div>
+
+      <div class="galleryTrack" id="galleryTrack">
+        <div class="gItem">
+          <img src="https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG" alt="Көкала көрінісі 1">
+        </div>
+        <div class="gItem">
+          <img src="https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG" alt="Көкала көрінісі 2">
+        </div>
+        <div class="gItem">
+          <img src="https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG" alt="Көкала көрінісі 3">
+        </div>
+        <div class="gItem">
+          <img src="https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG" alt="Көкала көрінісі 4">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3D + BIG MAP -->
+  <section class="pano">
+    <div class="container">
+      <div class="kicker2">
+        <span class="kicker2__line"></span>
+        <span>Маңғыстауды 3D форматта көр</span>
+      </div>
+
+      <h3>3D панорама</h3>
+
+      <div class="panoWrap">
+
+        <!-- 3D iframe орны (сілтемені өзің қоясың) -->
+        <div class="panoEmbed">
+          <!-- Мысал: <iframe src="YOUR_3D_LINK" loading="lazy" allowfullscreen></iframe> -->
+          <div>Осы жерге 3D панорама iframe сілтемесін қоясың</div>
+        </div>
+
+        <!-- BIG MAP + 8 markers -->
+        <div class="bigMap" id="bigMap">
+          <img src="assets/images/mangystau-map.jpg" alt="Маңғыстау картасы">
+
+          <!-- 1 -->
+          <a class="marker" style="left:18%; top:58%" href="tour-torysh.html" aria-label="Торыш">
+            <div class="marker__dot">1</div>
+            <div class="marker__label">Торыш</div>
+          </a>
+
+          <!-- 2 -->
+          <a class="marker" style="left:28%; top:42%" href="tour-kokala.html" aria-label="Көкала">
+            <div class="marker__dot">2</div>
+            <div class="marker__label">Көкала</div>
+          </a>
+
+          <!-- 3 -->
+          <a class="marker" style="left:36%; top:50%" href="tour-akmysh.html" aria-label="Ақмыш">
+            <div class="marker__dot">3</div>
+            <div class="marker__label">Ақмыш</div>
+          </a>
+
+        
+
+          <!-- 5 -->
+          <a class="marker" style="left:56%; top:54%" href="tour-tuzbair.html" aria-label="Тұзбайыр">
+            <div class="marker__dot">5</div>
+            <div class="marker__label">Тұзбайыр</div>
+          </a>
+
+          <!-- 6 -->
+          <a class="marker" style="left:64%; top:44%" href="tour-kyzylkup.html" aria-label="Қызылқұп">
+            <div class="marker__dot">6</div>
+            <div class="marker__label">Қызылқұп</div>
+          </a>
+
+          <!-- 7 -->
+          <a class="marker" style="left:74%; top:58%" href="tour-bokty.html" aria-label="Боқты">
+            <div class="marker__dot">7</div>
+            <div class="marker__label">Боқты</div>
+          </a>
+
+          <!-- 8 -->
+          <a class="marker" style="left:84%; top:46%" href="tour-teyesu.html" aria-label="Түйесу">
+            <div class="marker__dot">8</div>
+            <div class="marker__label">Түйесу</div>
+          </a>
+          <!-- 9 -->
+          <a class="marker" style="left:18%; top:72%" href="tour-bozzhyra.html" aria-label="Бозжыра">
+            <div class="marker__dot">9</div>
+            <div class="marker__label">Бозжыра</div>
+          </a>
+
+          <!-- 10 -->
+          <a class="marker" style="left:28%; top:66%" href="tour-airakty.html" aria-label="Айрақты">
+            <div class="marker__dot">10</div>
+            <div class="marker__label">Айрақты</div>
+          </a>
+
+          <!-- 11 -->
+          <a class="marker" style="left:34%; top:62%" href="tour-sherkala.html" aria-label="Шеркала">
+            <div class="marker__dot">11</div>
+            <div class="marker__label">Шеркала</div>
+          </a>
+
+          <!-- 12 -->
+          <a class="marker" style="left:40%; top:58%" href="tour-otpantau.html" aria-label="Отпан тау">
+            <div class="marker__dot">12</div>
+            <div class="marker__label">Отпан тау</div>
+          </a>
+
+          <!-- 13 -->
+          <a class="marker" style="left:26%; top:84%" href="tour-karakiya.html" aria-label="Қарақия ойпаты">
+            <div class="marker__dot">13</div>
+            <div class="marker__label">Қарақия ойпаты</div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer__inner" style="display:flex; gap:20px; justify-content:space-between; flex-wrap:wrap;">
+    <div>
+      <div style="font-weight:900; letter-spacing:.04em;">visit MANGYSTAU</div>
+      <div style="opacity:.75; margin-top:6px; max-width:360px; line-height:1.6;">
+        Маңғыстаудың көрікті жерлері, маршруттар, 3D турлар және туристке пайдалы ақпарат.
+        Сілтемелер мен деректерді кейін толықтырасың.
+      </div>
+    </div>
+
+    <div>
+      <div style="font-weight:800; margin-bottom:8px;">Бөлімдер</div>
+      <div style="display:grid; gap:6px;">
+        <a href="tours.html" style="color:#fff; text-decoration:none; opacity:.82;">Маршруттар</a>
+        <a href="map.html" style="color:#fff; text-decoration:none; opacity:.82;">3D турлар</a>
+        <a href="guides.html" style="color:#fff; text-decoration:none; opacity:.82;">Туристке ақпарат</a>
+        <a href="hotels.html" style="color:#fff; text-decoration:none; opacity:.82;">Қонақүй</a>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-weight:800; margin-bottom:8px;">Байланыс</div>
+      <div style="opacity:.82; line-height:1.7;">
+        Тел: +7 (776) 277-73-42 <br>
+        Email: website_helpp <br>
+        Атырау, Маңғыстау
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="opacity:.65; padding:12px 0 18px;">
+    © 2025 Mangystau Travel. Барлық құқықтар қорғалған.
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+
+<!-- Егер main.js-та галерея скроллы жоқ болса, мына кішкентай скрипт көмектеседі -->
+<script>
+  (function(){
+    const track = document.getElementById("galleryTrack");
+    const prev  = document.getElementById("gPrev");
+    const next  = document.getElementById("gNext");
+    if(!track || !prev || !next) return;
+
+    function step(){
+      const card = track.querySelector(".gItem");
+      return card ? (card.getBoundingClientRect().width + 14) : 360;
+    }
+
+    prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    next.addEventListener("click", () => track.scrollBy({ left:  step(), behavior: "smooth" }));
+  })();
+</script>
+
+</body>
+</html>

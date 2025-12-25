@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Visit Mangystau — Главная</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+  
+      <!-- LEFT: logo + menu (always fixed) -->
+      <div class="topbar__left">
+        <a class="brand" href="index.html">
+          <span class="brand__small">visit</span>
+          <span class="brand__big">MANGYSTAU</span>
+        </a>
+  
+        <button class="iconbtn iconbtn--menu" id="menuBtn" aria-label="Menu" aria-expanded="false">
+          <img src="image.png" alt="">
+        </button>
+      </div>
+  
+      <!-- RIGHT: icons stay on right -->
+      <div class="topbar__right">
+        <div class="social">
+          <a class="social__btn" href="#" aria-label="Instagram">
+            <img src="Inst.png" alt="">
+          </a>
+          <a class="social__btn" href="#" aria-label="Facebook">
+            <img src="f.png" alt="">
+          </a>
+          <a class="social__btn" href="#" aria-label="YouTube">
+            <img src="y.png" alt="">
+          </a>  
+          <a class="social__btn" href="#" aria-label="TikTok">
+            <img src="tik.png" alt="">
+          </a>
+        </div>
+      </div>
+  
+    </div>
+  
+    <!-- Backdrop (click to close) -->
+    <div class="menuBackdrop" id="menuBackdrop"></div>
+  
+    <!-- NAV = hidden menu panel -->
+    <nav class="nav menuPanel" id="nav">
+      <div class="menuPanel__head">
+        <div class="menuPanel__title">Мәзір</div>
+        <button class="iconbtn" id="menuClose" aria-label="Close menu">
+          <span class="x">✕</span>
+        </button>
+      </div>
+  
+      <a href="tours.html">Маршруттар</a>
+      <a href="aktau.html">Ақтау орталықтары</a>
+      <a href="guides.html">Туристке ақпарат</a>
+      <a href="map.html">Интерактив карта</a>
+      <a href="hotels.html">Қонақүйлер</a>
+    </nav>
+  </header>
+  
+  <!-- HERO -->
+<!-- COMMON BACKGROUND WRAP (Hero + Routes share one background) -->
+<section class="bgWrap">
+
+  <!-- HERO -->
+  <section class="hero hero--static" id="hero">
+    <!-- ЕКІ ФОНДЫ ӨШІРДІК (heroBgA/heroBgB керек емес) -->
+
+    <div class="hero__overlay"></div>
+
+    <div class="container hero__content">
+      <div class="hero__meta">
+        <div class="hero__line"></div>
+        <div class="hero__label">ТАНЫМАЛ МАРШРУТТАР</div>
+      </div>
+
+      <h1 class="hero__title">Маңғыстаудың әсем табиғаты</h1>
+
+      <p class="hero__text">
+        Маңғыстау — кең дала, ақ борлы жартастар, құмды жондар мен Каспий жағалауы тоғысқан ерекше өлке.
+        Мұнда әрбір көрініс фотосуретке сұранып тұрады, ал тыныштық пен кеңістік саяхатқа шабыт береді...
+     </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="tours.html">
+          Толығырақ <span class="btn__arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Егер 1-5 нөмір керек емес болса, мынаны өшір -->
+    
+    
+  
+  </section>
+
+  <!-- ROUTES SECTION (CARDS) -->
+  <section class="section section--dark routesOnBg" id="routes">
+    <div class="container section__head">
+      <div>
+        <div class="kicker">
+          <span class="kicker__line"></span>
+          <span>ШАБЫТ ЖӘНЕ ҰЛЫЛЫҚ КӨЗІ</span>
+        </div>
+        <h2 class="h2">Маршруттар</h2>
+      </div>
+
+      <div class="section__actions">
+        <a class="btn btn--ghost" href="tours.html">Барлық маршруттар <span class="btn__arrow">→</span></a>
+
+        <div class="sliderBtns">
+          <button class="pill" id="prevBtn" aria-label="Prev">←</button>
+          <button class="pill pill--primary" id="nextBtn" aria-label="Next">→</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="routes" id="routesTrack">
+
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/20/jpeg.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Теңіз шығанағы «Көгілдір бухта»</h3>
+            <p>Маңғышлақ түбегі — тастақты жағалауы жүздеген шақырымға созылатын ерекше өлке…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/24/mys-tupkaragan1.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>«Түпқараған» мүйісі</h3>
+            <p>Тарихы терең, табиғаты айрықша ландшафтты мекен…</p>
+            <a class="btn btn--small" href="tours.html">Барамын →</a>
+          </div>
+        </article>
+        
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/27/2020-07-13-122731.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Жығылған мүйісі</h3>
+            <p>Геологиялық опырылма және Каспийге ашылатын әсем панорамалар…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/34/zapadniy_kaz78_4x3.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Қапамсай каньоны</h3>
+            <p>Бірнеше шақырымға созылған борлы шатқал, көрінісі керемет табиғи аймақ…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 5 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/38/131d017abbedaa043f8fabb0d7bb154b.jpeg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Торыш — шарлы конкрециялар алқабы</h3>
+            <p>Табиғаттың жұмбағы: кең далаға шашылған тас шарлар мен ерекше ландшафт…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 6 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/43/0_10_570-min.JPG" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Көкала (Кокала) урочищесі</h3>
+            <p>Жартасты бедерлер, кең көкжиек және тыныш табиғи атмосфера…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 7 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/47/1602160368_01-4.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Ақмыш урочищесі</h3>
+            <p>Жерасты бастаулары бар жасыл оазис: бұлақтар, ағаштар, көлеңкелі сайлар…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+    
+        
+        <!-- Card 9 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/54/4de825188efc4522b56be71591cbe9ebmax-1200x800-97.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Тұзбайыр сор алқабы</h3>
+            <p>Ақ сор қабаты, көкжиекке дейін созылған кеңістік және “ай пейзажына” ұқсас көрініс…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 10 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/62/0_8_IMG_3095-min.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Қызылқұп урочищесі</h3>
+            <p>Қызыл, сары, ақ реңктері алмасатын түрлі түсті қабаттардан құралған ерекше жоталар…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 11 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/67/0_5_IMG_0450-min.jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Боқты тауы</h3>
+            <p>Ежелгі теңіз түбінен қалған қабаттар, кең панорама және өте фотогендік рельеф…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+        <!-- Card 12 -->
+        <article class="routeCard">
+          <img class="routeCard__img" src="https://backend.mangystau-travel.kz/storage/71/teyesu-sands-mangystau-region-(6).jpg" alt="">
+          <div class="routeCard__overlay"></div>
+          <div class="routeCard__content">
+            <h3>Түйесу құмдары</h3>
+            <p>Құм жоталары, желдің “суреті” және күн батар шақтағы керемет көріністер…</p>
+            <a class="btn btn--small" href="tours.html">Толығырақ →</a>
+          </div>
+        </article>
+        
+
+
+      </div>
+    </div>
+  </section>
+
+</section>
+
+
+ <!-- AFTER ROUTES: ABOUT + EVENTS + 3D + FOOTER -->
+<section class="afterRoutes">
+
+  <!-- ABOUT / INTRO (LIKE POSTER) -->
+  <section class="aboutPoster" id="about">
+    <div class="container aboutPoster__grid">
+
+      <!-- Left text -->
+      <div class="aboutPoster__left">
+        <h2 class="aboutPoster__h2">Біздің өлке — Маңғыстау</h2>
+        <p class="aboutPoster__p">
+          Бұл — шабыт пен айбынның қайнары. Мұнда шексіз дала, борлы жартастар, құмды жондар
+          және табиғаттың ерекше тынысы бар. Маңғыстау — Қазақстанның ең әсерлі аймақтарының бірі.
+        </p>
+      </div>
+
+      <!-- Center tall media (video) -->
+      <div class="aboutPoster__media">
+        <div class="mediaCard mediaCard--tall">
+          <img src="https://backend.mangystau-travel.kz/storage/105/%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_2023-12-26_144648052.png" alt="Маңғыстау табиғаты">
+          <button class="mediaCard__play"
+                  type="button"
+                  data-video="vo.mp4"
+                  aria-label="Бейнені көру">
+            <span class="mediaCard__icon">▶</span>
+            <span class="mediaCard__txt">Бейнені көру</span>
+          </button>
+        </div>
+
+        <!-- overlap small card -->
+        <div class="mediaCard mediaCard--small">
+          <img src="https://backend.mangystau-travel.kz/storage/34/zapadniy_kaz78_4x3.jpg " alt="Көрініс">
+        </div>
+      </div>
+
+      <!-- Right text -->
+      <div class="aboutPoster__right">
+        <h2 class="aboutPoster__h2 aboutPoster__h2--big">Аспан мен жер тоғысқан мекен</h2>
+        <p class="aboutPoster__p">
+          Мұнда таңғы шапақ пен күн батар шақ — ерекше көркем. Пейзаждар суретшіні де,
+          саяхатшыны да баурап алады. Бір рет көрсең — қайта оралғың келеді.
+        </p>
+
+        <ul class="aboutPoster__bullets">
+          <li>Ең жақсы уақыт: көктем және күз</li>
+          <li>Фото үшін: таңғы 06:00–09:00, кешкі 18:00–20:30</li>
+          <li>Қауіпсіздік: су, бас киім, желден қорғаныс</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- subtle ornament background -->
+    <div class="aboutPoster__ornament" aria-hidden="true"></div>
+  </section>
+
+
+
+
+
+  <!-- 3D TOURS -->
+  <section class="tours3d" id="tours3d">
+    <div class="container tours3d__head">
+      <div>
+        <div class="kicker">
+          <span class="kicker__line"></span>
+          <span>ШАБЫТ КӨЗІ ЖӘНЕ АЙБЫН</span>
+        </div>
+        <h2 class="tours3d__title">3D турлар</h2>
+      </div>
+
+      <div class="tours3d__controls">
+        <button class="pill" id="tourPrev" aria-label="Алдыңғы">←</button>
+        <button class="pill pill--primary" id="tourNext" aria-label="Келесі">→</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="tourTrack" id="tourTrack">
+        <article class="tourCard">
+          <img src="https://el.kz/upload/medialibrary/270/270dc09edb887785ed2c16cb6a80265c.jpg" alt="">
+          <div class="tourCard__overlay"></div>
+          <div class="tourCard__content">
+            <h3 class="tourCard__h3">Бозжыра тауы</h3>
+            <p class="tourCard__p">Ақ жартастар, кең панорама және ерекше атмосфера. 3D қарауға дайын.</p>
+            <a class="btn btn--small" href="https://www.google.com/maps/place/%D0%A3%D1%80%D0%BE%D1%87%D0%B8%D1%89%D0%B5+%D0%91%D0%BE%D0%B7%D0%B6%D1%8B%D1%80%D0%B0/@43.4151332,54.0725923,3a,75y,314.33h,53.19t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgIDq4u79Lg!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAPRy3c_m5qavnRumaZsLlwliuAQMs99qJu5QjVNapBIzNmdb62zBwAzv09cBujavKoyPQQxhDr9ju1hKIeXMMtErZWlq2BaHzDGqo_5eW-z_QkU1ehOXoCpekufTi3rLNALVpDzbyD4%3Dw900-h600-k-no-pi36.81-ya314.33-ro0-fo100!7i5120!8i2560!4m7!3m6!1s0x41c87cabff6d7473:0x73e53087efda930f!8m2!3d43.4151332!4d54.0725923!10e5!16s%2Fg%2F11f_h_tz70?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D">3D ашу →</a>
+          </div>
+        </article>
+
+        <article class="tourCard">
+          <img src="https://wildticketasia.com/uploads/posts/2023-09/1696010961_sherkala-mount-01.jpg" alt="">
+          <div class="tourCard__overlay"></div>
+          <div class="tourCard__content">
+            <h3 class="tourCard__h3">Шерқала</h3>
+            <p class="tourCard__p">Аңызға айналған тау. Биіктен көрініс және тарихи аура.</p>
+            <a class="btn btn--small" href="https://www.google.com/maps/place/%D0%A8%D0%B5%D1%80%D0%BA%D0%B0%D0%BB%D0%B0/@44.256389,52.006111,3a,75y,4.85h,94.99t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgIDC4tGZYA!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAPRy3c8OOobhZEzbg5ryYhJOSVqnbBgShml7OtfqzIkViz0EinFeH5ciq-cAm18JVGD28eiNpOaWcAL8AsYvQ1TPb6BGh828HMEktI81AI9N3TuO6e_9pwS1b16fKA6WCCveap-OQEE%3Dw900-h600-k-no-pi-4.988058934401494-ya4.8523275495318785-ro0-fo100!7i3840!8i1920!4m14!1m7!3m6!1s0x41b72194ba4f000b:0xa8e6273dcdbaae6e!2z0KjQtdGA0LrQsNC70LA!8m2!3d44.256389!4d52.006111!16s%2Fm%2F0gg5m8b!3m5!1s0x41b72194ba4f000b:0xa8e6273dcdbaae6e!8m2!3d44.256389!4d52.006111!16s%2Fm%2F0gg5m8b?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D">3D ашу →</a>
+          </div>
+        </article>
+
+        <article class="tourCard">
+          <img src="https://th.bing.com/th/id/R.73feef911ebfde16aa5bc9e233beadcb?rik=kJ5yxRtgGNvg5Q&riu=http%3a%2f%2fmirtayn.ru%2fwp-content%2fuploads%2fdolina-sharov-01.jpg&ehk=K125s6ZYsv7CrSaDo%2b2K7yy4h7wKQ6mCdFo14sKYWT0%3d&risl=&pid=ImgRaw&r=0" alt="">
+          <div class="tourCard__overlay"></div>
+          <div class="tourCard__content">
+            <h3 class="tourCard__h3">Торыш (Шарлар аңғары)</h3>
+            <p class="tourCard__p">Табиғаттың жұмбағы — тас шарлар. Виртуалды серуен.</p>
+            <a class="btn btn--small" href="https://www.google.com/maps/place/Torysh/@44.3237053,51.5962213,3a,75y,326.36h,90t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICEsY2XhwE!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAPRy3c-hv_fTGiLFvYdvdvB7rVzF1b52pIt1GRPcUfMJEqz3Tf5vMJIaw9mOJ8mKlhJCSsTxPXYMrQghoQFUxBMsuJC3tV1USeJQrdpgSOvJHuiloxjfHBJhySCIRr9KzPEGlqnjqz6fZA%3Dw900-h600-k-no-pi0-ya235.36374-ro0-fo100!7i8704!8i4352!4m14!1m7!3m6!1s0x41b6d481008da615:0xb78671aac7afc326!2sTorysh!8m2!3d44.3615366!4d51.5610276!16s%2Fg%2F11gfk0l2z8!3m5!1s0x41b6d481008da615:0xb78671aac7afc326!8m2!3d44.3615366!4d51.5610276!16s%2Fg%2F11gfk0l2z8?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D">3D ашу →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+
+<!-- VIDEO MODAL -->
+<div class="modal" id="videoModal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="1"></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Видео">
+    <button class="modal__close" type="button" data-close="1" aria-label="Жабу">✕</button>
+    <div class="modal__ratio">
+      <iframe id="videoFrame"
+              src=""
+              title="Video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <div class="brandFooter">
+        <div class="brandFooter__small">visit</div>
+        <div class="brandFooter__big">MANGYSTAU</div>
+      </div>
+      <p class="footer__text">
+        Маңғыстауды ашыңыз: маршруттар, гидтер, 3D турлар және пайдалы ақпарат.
+      </p>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__h4">Навигация</h4>
+      <a href="tours.html">Маршруттар</a>
+      <a href="guides.html">Туристке ақпарат</a>
+      <a href="hotels.html">Қонақүйлер</a>
+      <a href="map.html">3D турлар</a>
+      <a href="centers.html">Орталықтар</a>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__h4">Байланыс</h4>
+      <a href="tel:+77000000000">+7 (776) 277-73-42</a>
+      <a href="mailto:info@mangystau-travel.kz">website_helpp</a>
+      <span class="footer__muted">Атырау, Қазақстан</span>
+    </div>
+
+  
+  <div class="container footer__bottom">
+    <span>© 2025 Visit Mangystau. Барлық құқық қорғалған.</span>
+    <a href="#hero">Жоғарыға ↑</a>
+  </div>
+</footer>
+
+  
+  <script src="js/main.js"></script>
+</body>
+</html>

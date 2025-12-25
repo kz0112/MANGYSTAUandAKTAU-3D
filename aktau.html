@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Ақтау қаласы – Маңғыстау Explorer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		/* Using light theme colors to match map.html */
+		:root {
+			--sand: #E8D5C4;
+			--stone: #4A4A4A;
+			--desert: #C19A6B;
+			--sky: #87CEEB;
+			--text-dark: #2C2C2C;
+			--text-light: #FFFFFF;
+			--bg-light: #F8F6F3;
+			--card-bg: #FFFFFF;
+		}
+
+		html,
+		body {
+			margin: 0;
+			height: 100%;
+			font-family: 'Inter', system-ui, sans-serif;
+			overflow: hidden;
+		}
+
+		body {
+			display: flex;
+			background: var(--bg-light);
+		}
+		.container{width:min(1200px, 92%); margin:0 auto}
+		.topbar{
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 72px;
+  z-index: 2000;
+
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+}
+
+.container{ width:min(1200px, 92%); margin:0 auto; }
+
+.topbar__inner{
+  height: 72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  text-decoration:none;
+  color:#0b1220;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+.brand b{ font-weight:900; }
+
+.topbar__back{
+  text-decoration:none;
+  color: rgba(11,18,32,.65);
+}
+.topbar__back:hover{ color:#0b1220; }
+		/* Modern sidebar with card design */
+		.sidebar {
+			width: 380px;
+			background: var(--bg-light);
+			padding: 92px 24px 24px;
+			box-sizing: border-box;
+			overflow-y: auto;
+			border-right: 1px solid rgba(0, 0, 0, 0.08);
+		}
+
+		.sidebar::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.sidebar::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		.sidebar::-webkit-scrollbar-thumb {
+			background: rgba(0, 0, 0, 0.15);
+			border-radius: 4px;
+		}
+
+		.sidebar::-webkit-scrollbar-thumb:hover {
+			background: rgba(0, 0, 0, 0.25);
+		}
+
+		.sidebar-header {
+			margin-bottom: 24px;
+		}
+
+		.sidebar h2 {
+			font-size: 24px;
+			font-weight: 800;
+			color: var(--text-dark);
+			margin-bottom: 8px;
+			letter-spacing: -0.02em;
+		}
+
+		.sidebar-subtitle {
+			font-size: 14px;
+			color: var(--stone);
+			opacity: 0.7;
+		}
+
+		/* Added filter buttons */
+		.filter-group {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin-bottom: 20px;
+		}
+
+		.filter-btn {
+			background: var(--card-bg);
+			border: 2px solid rgba(0, 0, 0, 0.08);
+			color: var(--stone);
+			padding: 8px 16px;
+			border-radius: 20px;
+			font-size: 13px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+
+		.filter-btn:hover {
+			border-color: var(--desert);
+		}
+
+		.filter-btn.active {
+			background: var(--stone);
+			color: var(--text-light);
+			border-color: var(--stone);
+		}
+
+		/* Beautiful location cards with images */
+		.location-card {
+			background: var(--card-bg);
+			border-radius: 16px;
+			padding: 16px;
+			margin-bottom: 12px;
+			cursor: pointer;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			border: 2px solid transparent;
+			display: flex;
+			gap: 16px;
+			align-items: center;
+		}
+
+		.location-card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			border-color: var(--desert);
+		}
+
+		/* Changed active card color to sky blue */
+		.location-card.active {
+			border-color: var(--sky);
+			background: linear-gradient(135deg, #e0f4ff 0%, #ffffff 100%);
+			box-shadow: 0 4px 16px rgba(135, 206, 235, 0.3);
+		}
+
+		.location-thumbnail {
+			width: 64px;
+			height: 64px;
+			border-radius: 12px;
+			object-fit: cover;
+			flex-shrink: 0;
+		}
+
+		.location-info {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.location-name {
+			font-size: 15px;
+			font-weight: 700;
+			color: var(--text-dark);
+			margin-bottom: 4px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.location-type {
+			font-size: 12px;
+			color: var(--stone);
+			opacity: 0.7;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		/* Map wrapper improvements */
+		.map-wrapper {
+			flex: 1;
+			margin-top: 72px;
+			position: relative;
+		}
+
+		#map {
+			width: 100%;
+			height: 100%;
+		}
+
+		/* Custom marker popup styling */
+		.leaflet-popup-content-wrapper {
+			border-radius: 12px;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		.leaflet-popup-content {
+			margin: 0;
+			min-width: 200px;
+		}
+
+		.popup-content {
+			padding: 16px;
+		}
+
+		.popup-title {
+			font-size: 16px;
+			font-weight: 700;
+			color: var(--text-dark);
+			margin-bottom: 8px;
+		}
+
+		.popup-description {
+			font-size: 13px;
+			color: var(--stone);
+			line-height: 1.5;
+			margin-bottom: 12px;
+		}
+
+		.popup-btn {
+			display: inline-block;
+			padding: 8px 16px;
+			background: var(--text-dark);
+			color: var(--text-light);
+			text-decoration: none;
+			border-radius: 8px;
+			font-size: 13px;
+			font-weight: 600;
+			transition: all 0.2s ease;
+		}
+
+		.popup-btn:hover {
+			background: var(--stone);
+			transform: translateY(-1px);
+		}
+
+		/* Mobile responsive design */
+		@media (max-width: 968px) {
+			.sidebar {
+				position: fixed;
+				left: 0;
+				top: 72px;
+				width: 100%;
+				max-width: 380px;
+				height: calc(100vh - 72px);
+				transform: translateX(-100%);
+				transition: transform 0.3s ease;
+				z-index: 999;
+				box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+			}
+
+			.sidebar.open {
+				transform: translateX(0);
+			}
+
+			.map-wrapper {
+				width: 100%;
+			}
+
+			.mobile-toggle {
+				position: fixed;
+				bottom: 24px;
+				right: 24px;
+				width: 56px;
+				height: 56px;
+				border-radius: 50%;
+				background: var(--text-dark);
+				color: var(--text-light);
+				border: none;
+				font-size: 24px;
+				cursor: pointer;
+				z-index: 1001;
+				box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+
+		@media (min-width: 969px) {
+			.mobile-toggle {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Enhanced header -->
+	<header class="topbar">
+		<div class="container topbar__inner">
+		  <a href="index.html" class="brand">visit <b>MANGYSTAU</b></a>
+		  <a class="topbar__back" href="index.html">← Басты бет</a>
+		</div>
+	  </header>
+	<!-- Enhanced sidebar with cards -->
+	<div class="sidebar" id="sidebar">
+		<div class="sidebar-header">
+			<h2>Ақтау қаласы</h2>
+			<div class="sidebar-subtitle">Қаланың ең жақсы орындарын табыңыз</div>
+		</div>
+
+		<!-- Added filter buttons for categories -->
+		<div class="filter-group">
+			<button class="filter-btn active" data-filter="all">Барлығы</button>
+			<button class="filter-btn" data-filter="restaurant">Ресторандар</button>
+			<button class="filter-btn" data-filter="cafe">Кафе</button>
+			<button class="filter-btn" data-filter="shop">Дүкендер</button>
+		</div>
+
+		<div id="locationCards"></div>
+	</div>
+
+	<!-- Map -->
+	<div class="map-wrapper">
+		<div id="map"></div>
+	</div>
+
+	<!-- Mobile menu toggle -->
+	<button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">☰</button>
+
+	<script>
+		const places = [
+  {
+    id: "bozjyra",
+    name: "Dostyk Hotel Aktau",
+    type: "hotel",
+    categoryLabel: "Қонақүй",
+    coords: [43.6585, 51.167],
+    address: "8-шағынаудан, 3/1, 1–6 қабат",
+    description: "Dostyk Hotel Aktau — Ақтаудың 8-шағынауданында орналасқан жайлы қонақүй. Қала ішінде тез қатынауға ыңғайлы, бөлмелері кең әрі таза, қызмет көрсетуі тұрақты. Іскерлік сапарға да, отбасылық демалысқа да қолайлы: тыныш атмосфера, қажетті инфрақұрылым және жақын маңда дүкендер мен қоғамдық орындар бар.",
+    tags: ["ұлттық асхана", "отбасылық кешкі ас", "панорамалық көрініс"],
+    image: "https://aktau.dostykhotel.com/wp-content/uploads/slider/cache/3e97e1dc43178a0a699b663e12bf9e6b/Dostyk-Aktau-Gostinica.jpg",
+    link: "https://maps.app.goo.gl/CiLGr1HryYyVYFTz6"
+  },
+  {
+    id: "gadim",
+    name: "Гадим ағайдың кәуабы",
+    type: "cafe",
+    categoryLabel: "Кафе-ресторан",
+    coords: [43.6578, 51.1725],
+    address: "Ақтау, «Гадим ағайдың кәуабы» (8-шағынаудан, 39Б)",
+    description:
+      "Мекеменің басты ерекшелігі — әрдайым жаңа әрі ыстық тағамдар. Кәуәп дәстүрлі тәсілмен табиғи көмірде дайындалады.",
+    tags: ["кәуап", "гриль", "алып кету"],
+    image: "https://avatars.mds.yandex.net/get-altay/11183932/2a0000019165d464c38265eae4fd38030153/L_height",
+    link: "https://maps.app.goo.gl/gLmVedYj2rwMtAzz9"
+  },
+  {
+    id: "mashoda",
+    name: "Alash Orda мейрамханасы",
+    type: "restaurant",
+    categoryLabel: "Мейрамхана",
+    coords: [43.6535, 51.1605],
+    address: "Ақтау, Alash Orda (Albion ТК, 19-шағынаудан, 28)",
+    description:
+      "Қалалық өмір ырғағы мен нәзік эстетиканы үйлестіретін стильді интерьері бар заманауи мейрамхана.",
+    tags: ["заманауи дизайн", "қалаға көрініс", "десерттер"],
+    image: "https://avatars.mds.yandex.net/get-altay/14021521/2a00000194c813e4898df7d7331ba74f458a/L_height",
+    link: "https://maps.app.goo.gl/NeopR3KAJpELdZSX7"
+  },
+  {
+    id: "hti",
+    name: "ХАЕТ мейрамханасы",
+    type: "restaurant",
+    categoryLabel: "Мейрамхана",
+    coords: [43.6539, 51.1733],
+    address: "Ақтау, ХАЕТ («Астана» СОО, 14-шағынаудан, 33/2, цоколь қабат)",
+    description:
+      "ХАЕТ — іскерлік кездесулер мен отбасылық кешкі астарға қолайлы, жайлы әрі сенімді орын.",
+    tags: ["бизнес-ланч", "банкеттер", "классикалық мәзір"],
+    image: "https://avatars.mds.yandex.net/get-altay/13220786/2a00000191f095c2447f56cb8fa664509fa1/L_height",
+    link: "https://maps.app.goo.gl/f89nvFEfXLbMihrD7"
+  },
+  {
+    id: "coffeecity",
+    name: "CoffeeCity",
+    type: "cafe",
+    categoryLabel: "Кофехана",
+    coords: [43.6515, 51.168],
+    address: "Ақтау, CoffeeCity (Green Plaza ТК, 17-шағынаудан, 6)",
+    description:
+      "CoffeeCity — қалалық өмір ырғағын сездіретін заманауи кофехана. Мұнда жоғары сапалы specialty кофе дайындалады.",
+    tags: ["кофе", "алып кету", "ко-уоркинг"],
+    image: "https://cachizer3.2gis.com/reviews-photos/d9dda883-1a47-45de-9192-5dd1561ea7b9.jpg?w=320",
+    link: "https://maps.app.goo.gl/Qme4WSuheguG5LnW6"
+  },
+  {
+    id: "travelers_coffee_aktau",
+    name: "Traveler’s Coffee",
+    type: "cafe",
+    categoryLabel: "Кофехана",
+    coords: [43.6517, 51.1635],
+    address: "Ақтау, 14-шағынаудан",
+    description:
+      "Авторлық сусындары мен жайлы атмосферасы бар халықаралық желінің танымал кофеханасы.",
+    tags: ["кофе", "кездесулер", "wifi"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzbjeugF6xSzFNoN1J2j4ERx8RhlTL3zZjsg06ej_VdubwXfEeKrU1v7RHTjakUToMNgY6fVfjv7pwL0QZtHgrrLwNZ69Udxf4o0kB7ptWkfyh30QXnTgioX1GZuL3Lux3tbcQ=w497-h240-k-no",
+    link: "https://maps.app.goo.gl/g6NXYLXqbS16fcxx5"
+  },
+  {
+    id: "zephyr_cafe",
+    name: "ZEPHYR",
+    type: "cafe",
+    categoryLabel: "Кофехана",
+    coords: [43.6489, 51.1612],
+    address: "Ақтау, 11-шағынаудан",
+    description: "Таңғы ас, десерттер және сапалы кофе ұсынатын стильді кофехана.",
+    tags: ["таңғы ас", "десерттер", "instagram-ға лайық"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwFJ3A0LEyzYQVfIuW86gfslIIYExX1-2wUnJTGTwB7qNILT1cPHmROOzZNKo6u0m7Ag7rfAff0AbajMMkggZaXX9kplT7NpLeSF49Ray0jAije-oDP3P5T5wrD_IGFGxvYnY-l=w408-h544-k-no",
+    link: "https://maps.app.goo.gl/HYQ8QQ7Zye17oNpS7"
+  },
+  {
+    id: "global_coffee_aktau",
+    name: "Global Coffee",
+    type: "cafe",
+    categoryLabel: "Кофехана",
+    coords: [43.6534, 51.1708],
+    address: "Ақтау, 16-шағынаудан",
+    description:
+      "Жылдам сервисімен танымал кофеханалар желісі. Студенттер мен фрилансерлер жиі келеді.",
+    tags: ["алып кету", "кофе", "жұмыс/оқу"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxeYPiCOk3k_t-sI3FLeymgkmVOb_k2VYy-FhV3B8WS3WyU-EvLmKaQ6R6JuR6avY-liEkOeXXFxMVIixqjp2RVre_R_jXjRd9AMM7KQrTagXN4fv3rWcEawLPi1Vz5-x27biA=w408-h306-k-no",
+    link: "https://maps.app.goo.gl/Xrco2jYdegDY1bc47"
+  },
+  {
+    id: "barashka_restaurant",
+    name: "Barashka Dine & Drink",
+    type: "restaurant",
+    categoryLabel: "Мейрамхана",
+    coords: [43.64255, 51.1744973],
+    address: "Ақтау, 15-шағынаудан",
+    description: "Мәзірі әртүрлі, атмосферасы жайлы мейрамхана.",
+    tags: ["түскі ас", "кешкі ас", "отбасы"],
+    image: "https://lh3.googleusercontent.com/p/AF1QipMu0sECSfIGFlitGky2-jB_Fncx_s12vKX7kDPY=w408-h509-k-no",
+    link: "https://maps.app.goo.gl/tvSxgV7T9B3EVB1J8"
+  },
+  {
+    id: "aktau_lighthouse",
+    name: "Ақтау шамшырағы",
+    type: "attraction",
+    categoryLabel: "Көрікті жер",
+    coords: [43.6349, 51.1701],
+    address: "Ақтау, жағалау (набережная)",
+    description:
+      "Әлемдегі сирек шамшырақтардың бірі: тұрғын үйдің төбесінде орналасқан.",
+    tags: ["теңіз", "фото", "серуен"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzX5ttyTNCwy5jsbwvnY32UHjAXuWXW_8ZUaV8uHV_JdimtSPsQudbgQlh3vnkM2tBma_pWc4fqHvKd7g70CNA-8RCAzXDQiWLjXdlsGn3BRhGqx02Y6GO5AU4cXAJ-CuOz9-PAAw=w408-h544-k-no",
+    link: "https://maps.app.goo.gl/7DxJfbmUDPo3Z86F8"
+  },
+  {
+    id: "dostar_beach",
+    name: "Достар жағажайы",
+    type: "attraction",
+    categoryLabel: "Жағажай",
+    coords: [43.6268, 51.1864],
+    address: "Ақтау, Каспий теңізі жағалауы",
+    description: "Демалуға, серуендеуге және күн батуды тамашалауға арналған танымал қалалық жағажай.",
+    tags: ["жағажай", "теңіз", "күн батуы"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyzNxSWyeNUradgxX0bfD5Z1KIlUHadkNabSTL1E9KOiJM6pYke1G25Sodh2Ug3wvi-29lUPinpZ6LveVD34HqhRFLLbxSok9XqtOGyM0zG0t5kun_Hkl4dVwSiC1hn9VqNVh5AJg=w408-h306-k-no",
+    link: "https://maps.app.goo.gl/xYjaL7dgVnod4zaP8"
+  },
+  {
+    id: "trk_aktau",
+    name: "Aktau СОО",
+    type: "mall",
+    categoryLabel: "Сауда орталығы",
+    coords: [43.6567, 51.1789],
+    address: "Ақтау, 17-шағынаудан",
+    description:
+      "Дүкендері, кафелері және ойын-сауығы бар ірі сауда-ойын-сауық орталығы.",
+    tags: ["шопинг", "кино", "тамақ"],
+    image: "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzBsWryLRqZbw3I1zutWicszJ0qHjp-bU44ac_3mpH8kwfgvh7STIRhyS3egGj11A4L62AEYa2tXqTiIrhsBjU8dqzC9hNBhzBDHbA7WSWLk42p5GoWIBzlZ7l6TvOJWjR6qF4s3rBKum4=w408-h306-k-no",
+    link: "https://maps.app.goo.gl/K3QCriwJBSWjhEWKA"
+  }
+		]
+
+		/* ================= MAP ================= */
+		const map = L.map("map").setView([43.655, 51.17], 13)
+
+		L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+			attribution: "© OpenStreetMap contributors",
+			maxZoom: 18
+		}).addTo(map)
+
+		const locationCards = document.getElementById("locationCards")
+		let selectedPlace = null
+		let activeCard = null
+		const markers = []
+		let currentFilter = 'all'
+
+		/* Color coding function for different place types */
+		function getTypeColor(type) {
+			switch (type) {
+				case 'restaurant': return '#fb7185'
+				case 'cafe': return '#22c55e'
+				case 'shop': return '#3b82f6'
+				default: return '#f59e0b'
+			}
+		}
+
+		function renderCards(filter = 'all') {
+			locationCards.innerHTML = ''
+			currentFilter = filter
+
+			places.forEach((place, index) => {
+				if (filter !== 'all' && place.type !== filter) return
+
+				const card = document.createElement("div")
+				card.className = "location-card"
+				card.innerHTML = `
+					<img src="${place.image}" alt="${place.name}" class="location-thumbnail" onerror="this.style.display='none'">
+					<div class="location-info">
+						<div class="location-name">${place.name}</div>
+						<div class="location-type">${place.categoryLabel}</div>
+					</div>
+				`
+				locationCards.appendChild(card)
+
+				function select() {
+					selectedPlace = place
+
+					document.querySelectorAll(".location-card").forEach(el =>
+						el.classList.remove("active")
+					)
+					card.classList.add("active")
+
+					marker.openPopup()
+					map.setView([place.coords[0], place.coords[1]], 15, {
+						animate: true,
+						duration: 0.5
+					})
+
+					activeCard = card
+				}
+
+				card.onclick = select
+
+				/* Custom marker with color based on type */
+				const markerColor = getTypeColor(place.type)
+				const marker = L.marker([place.coords[0], place.coords[1]], {
+					icon: L.divIcon({
+						className: '',
+						html: `<div style="width:20px;height:20px;border-radius:50%;background:${markerColor};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);"></div>`,
+						iconSize: [20, 20],
+						iconAnchor: [10, 10]
+					})
+				}).addTo(map)
+
+				markers.push(marker)
+
+				const popupContent = `
+					<div class="popup-content">
+						<div class="popup-title">${place.name}</div>
+						<div class="popup-description">${place.description}</div>
+						<a href="${place.link}" target="_blank" class="popup-btn">Картада ашу</a>
+					</div>
+				`
+				marker.bindPopup(popupContent, {
+					maxWidth: 280,
+					className: 'custom-popup'
+				})
+
+				marker.on("click", select)
+			})
+		}
+
+		/* Filter button functionality */
+		document.querySelectorAll('.filter-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+				btn.classList.add('active')
+
+				// Clear existing markers
+				markers.forEach(m => map.removeLayer(m))
+				markers.length = 0
+
+				renderCards(btn.dataset.filter)
+			})
+		})
+
+		function toggleSidebar() {
+			const sidebar = document.getElementById('sidebar')
+			sidebar.classList.toggle('open')
+		}
+
+		map.on('click', function () {
+			if (window.innerWidth <= 968) {
+				document.getElementById('sidebar').classList.remove('open')
+			}
+		})
+
+		// Initial render
+		renderCards('all')
+	</script>
+
+</body>
+
+</html>

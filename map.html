@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Карта</title>
+
+  <!-- Егер сенде css/style.css бар болса қалдыра бер -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .section{ width:min(1100px, 92%); margin: 40px auto; }
+    .section h2{ font-size: 28px; margin-bottom: 14px; }
+    .section h3{ font-size: 22px; margin: 24px 0 12px; }
+
+    .mapFrame{
+      width: 100%;
+      height: 460px;
+      border: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+
+    @media (max-width: 640px){
+      .panoCard__img{ height: 420px; }
+      .panoTitle{ font-size: 30px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header header--simple">
+    <div class="container header__inner">
+      <a href="index.html" class="logo">visit <b>MANGYSTAU</b></a>
+      <a class="header__back" href="index.html">← Басты бет</a>
+    </div>
+  </header>
+<section class="section">
+  <h2>Туристік карта</h2>
+
+  <!-- ✅ Google Maps (общий обзор по Маңғыстау, можно зум поменять) -->
+  <iframe
+    class="mapFrame"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps?q=44.0,52.0&z=7&output=embed"
+    allowfullscreen
+  ></iframe>
+
+  <!-- ✅ 3D маршрут / панорама (ең сенімді тәсіл — ссылка жаңа бетте ашылады) -->
+  
+</section>
+
+</body>
+</html>

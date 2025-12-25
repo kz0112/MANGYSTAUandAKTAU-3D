@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Қонақүйлер | Mangystau Travel</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Егер style.css-те grid/card стилі толық болмаса, осы ішкі стиль көмектеседі -->
+  <style>
+    .section { padding: 110px 0 50px; }
+    .container { width: min(1200px, 92%); margin: 0 auto; }
+
+    .pageTitle { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom: 18px; }
+    .pageTitle h2 { margin:0; font-size: 28px; letter-spacing: -0.02em; }
+    .pageTitle p { margin:0; opacity:.7; }
+
+    .filters {
+      display:flex; flex-wrap:wrap; gap:10px;
+      background:#fff; border:1px solid rgba(11,18,32,.08);
+      border-radius:14px; padding:12px; margin-bottom:18px;
+    }
+    .filters input, .filters select{
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(11,18,32,.14);
+      padding: 0 12px;
+      outline: none;
+      background: #fff;
+      min-width: 180px;
+    }
+    .filters .miniNote{ margin-left:auto; opacity:.7; font-size: 13px; display:flex; align-items:center; }
+
+    .cardsGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width: 980px){ .cardsGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 620px){ .cardsGrid{ grid-template-columns: 1fr; } }
+
+    .hotelCard{
+      border-radius: 18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(11,18,32,.08);
+      box-shadow: 0 6px 18px rgba(11,18,32,.06);
+      display:flex;
+      flex-direction:column;
+      min-height: 360px;
+    }
+    .hotelCard__img{
+      height: 170px;
+      width:100%;
+      object-fit: cover;
+      display:block;
+      background:#f3f4f6;
+    }
+    .hotelCard__body{ padding: 14px 14px 12px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .hotelCard__top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .hotelCard__name{ font-weight: 800; line-height: 1.2; }
+    .hotelCard__meta{ opacity:.72; font-size: 13px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(11,18,32,.06);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .hotelCard__desc{ opacity:.85; font-size: 13.5px; line-height:1.45; margin:0; }
+    .hotelCard__list{ margin:0; padding-left: 16px; opacity:.85; font-size: 13.5px; line-height:1.45; }
+    .hotelCard__actions{ display:flex; gap:10px; margin-top:auto; }
+    .btnSmall{
+      display:inline-flex; align-items:center; justify-content:center;
+      height: 40px; padding: 0 12px;
+      border-radius: 12px;
+      text-decoration:none;
+      border:1px solid rgba(11,18,32,.14);
+      color:#0b1220;
+      font-weight: 700;
+      background:#fff;
+      flex:1;
+    }
+    .btnSmall--primary{
+      background:#0b1220; color:#fff; border-color:#0b1220;
+    }
+    .emptyState{
+      padding: 18px;
+      border-radius: 14px;
+      border:1px dashed rgba(11,18,32,.18);
+      opacity:.8;
+      background:#fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Сенің сайттағы header стиліңе ұқсас (қаласаң өз header-іңді қой) -->
+  <header class="header header--simple">
+    <div class="container header__inner">
+      <a href="index.html" class="logo">visit <b>MANGYSTAU</b></a>
+      <a class="header__back" href="index.html">← Басты бет</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="pageTitle">
+        <div>
+          <h2>Қонақүйлер</h2>
+          <p>Ақтау және Атырау қалаларындағы қонақүй нұсқалары</p>
+        </div>
+      </div>
+
+      <div class="filters">
+        <input id="q" type="search" placeholder="Іздеу: атауы, аудан, адрес…" />
+        <select id="city">
+          <option value="all">Барлық қала</option>
+          <option value="Aktau">Ақтау</option>
+          <option value="Atyrau">Атырау</option>
+        </select>
+        <select id="stars">
+          <option value="all">Жұлдыз: Барлығы</option>
+          <option value="5">5★</option>
+          <option value="4">4★</option>
+          <option value="3">3★</option>
+          <option value="0">Жұлдызы көрсетілмеген</option>
+        </select>
+        <div class="miniNote" id="countNote"></div>
+      </div>
+
+      <div class="cardsGrid" id="grid"></div>
+
+      <div class="emptyState" id="empty" style="display:none;">
+        Нәтиже табылмады. Фильтрді өзгертіп көр немесе іздеу сөзін қысқарт.
+      </div>
+
+    </div>
+  </section>
+
+<script>
+  // Қонақүйлер тізімі (оңай кеңейтіледі)
+  // Енгізілген атаулар Booking-тің қала беттерінде кездесетін негізгі қонақүйлерден алынды. 
+  // Aktau: :contentReference[oaicite:1]{index=1}  |  Atyrau: :contentReference[oaicite:2]{index=2}
+
+  const HOTELS = [
+    /* ===================== AKTAU ===================== */
+    {
+      id: "holiday-inn-aktau",
+      name: "Holiday Inn Aktau (IHG)",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Іскерлік сапарға да, демалысқа да ыңғайлы қонақүй. Қызметі тұрақты, орналасуы қолайлы.",
+      highlights: ["Wi-Fi", "Мейрамхана/таңғы ас", "Таза бөлмелер"],
+      image: "https://digital.ihg.com/is/image/ihg/holiday-inn-aktau-4422088918-4x3",
+      map: "https://www.booking.com/hotel/kz/holiday-inn-aktau.ru.html?msockid=21eb43c78312659f0d4b573182146412"
+    },
+    {
+      id: "renaissance-aktau",
+      name: "Renaissance Aktau Hotel",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Қалалық деңгейдегі комфорт: кең бөлмелер, сервис, бизнес-қажеттіліктерге ыңғайлы.",
+      highlights: ["Бизнес", "Фитнес", "Қызмет көрсету"],
+      image: "https://kompastour.com/useruploads/hotels/hotel_e9fd484e63.jpg",
+      map: "https://www.booking.com/hotel/kz/renaissance-aktau.ru.html?aid=357028&label=bin859jc-10CAsogAFCEXJlbmFpc3NhbmNlLWFrdGF1SDNYA2iAAYgBAZgBM7gBF8gBDNgBA-gBAfgBAYgCAagCAbgC6dW2ygbAAgHSAiRlNmI2MzlkMC0yNmZiLTQ0NzEtODQwYS00YmU3ZTg5ZDk0ZGHYAgHgAgE&sid=b18a0c6745bb62e1fb88e2ed68cc1f63&dist=0&keep_landing=1&sb_price_type=total&type=total&"
+    },
+    {
+      id: "caspian-riviera",
+      name: "Caspian Riviera Grand Palace Hotel",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Көрінісі әдемі, жоғары деңгейлі форматтағы қонақүй. Іссапар/демалысқа кең нұсқа.",
+      highlights: ["Панорама", "Комфорт", "Сервис"],
+      image: "https://th.bing.com/th/id/R.495df70ccc3140bd5fabf136d3b5410f?rik=fp0Cn%2fGxgdu5HQ&pid=ImgRaw&r=0",
+      map: "https://www.booking.com/hotel/kz/caspian-riviera-grand-palace-aktau.ru.html?aid=357028&label=bin859jc-10CAsogAFCImNhc3BpYW4tcml2aWVyYS1ncmFuZC1wYWxhY2UtYWt0YXVIM1gDaIABiAEBmAEzuAEXyAEM2AED6AEB-AEBiAIBqAIBuALZ17bKBsACAdICJGY2M2E5N2I1LTJiYTktNDdiOC05OGM1LTM3ZDdkMjIxYjc1MtgCAeACAQ&sid=b18a0c6745bb62e1fb88e2ed68cc1f63&dist=0&keep_landing=1&sb_price_type=total&type=total&"
+    },
+    {
+      id: "rixos-water-world-aktau",
+      name: "Rixos Water World Aktau",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау жағалауы",
+      address: "Ақтау маңы",
+      desc: "Курорттық формат (теңіз, демалыс, отбасылық сервис). Жазда өте сұраныста.",
+      highlights: ["Курорт", "Отбасылық демалыс", "Теңіз"],
+      image: "https://mmf5angy.twic.pics/ahstatic/www.ahstatic.com/photos/b7r0_ho_00_p_1024x768.jpg?ritok=61&twic=v1/cover=1600x900",
+      map: "https://www.booking.com/hotel/kz/rixos-aktau-aktau.ru.html?msockid=21eb43c78312659f0d4b573182146412"
+    },
+    {
+      id: "chagala-aktau",
+      name: "Chagala Aktau Hotel",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Практикалық нұсқа: тұруға ыңғайлы, қала ішінде тез қатынауға жақсы.",
+      highlights: ["Қолайлы локация", "Тыныш", "Wi-Fi"],
+      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/2a/ac/24/chagala-hotel.jpg?w=1400&h=-1&s=1",
+      map: "https://www.booking.com/hotel/kz/shagalaaktau.ru.html?msockid=21eb43c78312659f0d4b573182146412"
+    },
+    {
+      id: "dostyk-business-aktau",
+      name: "Dostyk Business Hotel",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Қаладағы бизнес-қонақүй форматы: қысқа тұруға, іскерлік кездесуге ыңғайлы.",
+      highlights: ["Бизнес", "Тұрақ", "Қызмет көрсету"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/540230235.jpg?k=b9c6f71004538cc2342f72d36d134c15930da5c6190a0843eb368ab65f111b24&o=&hp=1",
+      map: "https://www.booking.com/hotel/kz/dostyk-aktau1.ru.html?aid=357028&label=bin859jc-10CAsogAFCDWRvc3R5ay1ha3RhdTFIM1gDaIABiAEBmAEzuAEXyAEM2AED6AEB-AEBiAIBqAIBuALj2LbKBsACAdICJGFkZTU3Y2VjLWU2NjgtNDMwYi04ZmRhLTU1MDI0ZGZkMjcyNNgCAeACAQ&sid=b18a0c6745bb62e1fb88e2ed68cc1f63&dist=0&keep_landing=1&sb_price_type=total&type=total&"
+    },
+    {
+      id: "tengri-aktau",
+      name: "Tengri Hotel (Aktau)",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Баға/сапа теңгерімі жақсы болатын қалалық қонақүй нұсқасы.",
+      highlights: ["Қолжетімді", "Таза", "Орталыққа жақын"],
+      image: "https://res.klook.com/klook-hotel/image/upload/trip/220910000000p95sh1D97_R_550_412_R5.jpg",
+      map: "https://www.booking.com/hotel/kz/tengri-aktau.ru.html?msockid=21eb43c78312659f0d4b573182146412"
+    },
+    {
+      id: "aston-aktau",
+      name: "Aston Hotel (Aktau)",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Қаланың ішінде орналасқан, тыныш және жинақы форматтағы қонақүй.",
+      highlights: ["Комфорт", "Оңай табу", "Wi-Fi"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/525951267.jpg?k=2550f663a632451c81f1db584bf8432c535de14e6e6d41fbd241a9eb4115cc84&o=&hp=1",
+      map: "https://www.booking.com/hotel/kz/aston.ru.html?aid=357028&label=bin859jc-10CAsogAFCBWFzdG9uSDNYA2iAAYgBAZgBM7gBF8gBDNgBA-gBAfgBAYgCAagCAbgCrdm2ygbAAgHSAiQ1ZTY1YTFmMC0yYzdhLTQ1MGUtODYxYi1mNjM3NThkMGJmZGLYAgHgAgE&sid=b18a0c6745bb62e1fb88e2ed68cc1f63&dist=0&keep_landing=1&sb_price_type=total&type=total&"
+    },
+    {
+      id: "turan-aktau",
+      name: "TURAN HOTEL (Aktau)",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Қала ішінде тұруға ыңғайлы. Қысқа мерзімді қонақтауға жақсы.",
+      highlights: ["Қысқа тұру", "Орталыққа жақын", "Таза бөлме"],
+      image: "https://avatars.mds.yandex.net/get-altay/10239151/2a0000018fdeca223b4d8f22549e4c84d548/orig",
+      map: "https://www.booking.com/hotel/kz/turan-aktau.ru.html?msockid=21eb43c78312659f0d4b573182146412"
+    },
+    {
+      id: "grand-victory-aktau",
+      name: "Grand Hotel Victory",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Қалалық формат, кең бөлмелі нұсқалар кездеседі. Сервиске бағытталған.",
+      highlights: ["Сервис", "Тұрақ", "Комфорт"],
+      image: "https://media-cdn.tripadvisor.com/media/photo-s/03/56/35/89/grand-hotel-victory.jpg",
+      map: "https://www.booking.com/hotel/kz/grand-victory.ru.html?aid=357028&label=bin859jc-10CAsogAFCDWdyYW5kLXZpY3RvcnlIM1gDaIABiAEBmAEzuAEXyAEM2AED6AEB-AEBiAIBqAIBuAKw2rbKBsACAdICJGE2ODIwZWU5LTE1YTQtNGZiNi04NmZkLWY3MzI1MjcyNGNkN9gCAeACAQ&sid=b18a0c6745bb62e1fb88e2ed68cc1f63&dist=0&keep_landing=1&sb_price_type=total&type=total&"
+    },
+    {
+      id: "zheruiyk-aktau",
+      name: "Zheruiyk Hotel",
+      city: "Aktau",
+      stars: 0,
+      area: "Ақтау",
+      address: "Ақтау қаласы",
+      desc: "Тыныш, қарапайым және қолжетімді қонақүй нұсқасы.",
+      highlights: ["Қолжетімді", "Тыныш", "Wi-Fi"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/88583524.jpg?k=1ab5d11383b96136468202e1ff57d0d0d9d5c8cefc25f08fdfa8d07bc543f6a3&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=318615&label=Russian_Kazakhstan_RU_KZ_29562094705-ZczreBs_kH2Pg75OwTsaqAS637942121498%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi55840945587%3Atidsa-321713588043%3Alp9198010%3Ali%3Adec%3Adm%3Aag29562094705%3Acmp340176145&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQGp2ksPWwQSaJt0KNfzU0gQOPmFa3oKSth1hYmmq4ACf6lJ36DSXARoCtm8QAvD_BwE&highlighted_hotels=1435715&checkin=2025-12-30&redirected=1&city=-2334223&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+
+    /* ===================== ATYRAU ===================== */
+    {
+      id: "somerset-atyrau",
+      name: "Somerset City Centre Atyrau",
+      city: "Atyrau",
+      stars: 5,
+      area: "Орталық",
+      address: "Атырау қаласы",
+      desc: "Қала орталығына жақын, 5★ форматтағы сервис. Ұзақ тұруға да ыңғайлы.",
+      highlights: ["5★", "Орталық", "Комфорт"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/529927263.jpg?k=d096cf11da87c66ca13429ea1306179a6a7c0ed51e7eb085b4b59f2c4c335cc5&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=somerset-city-centre-atyrau-w%2A4Tv6st8_AlQte1XwuLOQS594325136095%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-1678573710685%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQGrRxfzX9oKuv6fKADE3AE5CxnQ0Eh5cOnwTbq2NIVwZ7cBa-daX7RoCDMcQAvD_BwE&highlighted_hotels=8146007&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "sb-river-hotels",
+      name: "SB River Hotels",
+      city: "Atyrau",
+      stars: 4,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "4★ қонақүй: Wi-Fi, таңғы ас, бөлмелері таза әрі жинақы формат.",
+      highlights: ["4★", "Wi-Fi", "Таңғы ас"],
+      image: "https://cachizer3.2gis.com/reviews-photos/e907a031-993d-4894-b6b6-28635ccc6d0e.jpg?w=1920",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=sarai-batu-atyrau12-r7CcaVJnSV5_PAT1fgbN0wS589541772660%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-1432994630100%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQCX6rZSniLwVio7Qr_EGXnjgBjNQl_nNsvDBeeHvMETkZPf2sjZxPBoC1v0QAvD_BwE&highlighted_hotels=7319033&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "residence-keruen",
+      name: "Residence Keruen",
+      city: "Atyrau",
+      stars: 3,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "3★ формат: отбасылық бөлмелер кездеседі, ұзақ тұруға ыңғайлы.",
+      highlights: ["3★", "Отбасылық", "Wi-Fi"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/46475830.jpg?k=25f3d2dc80c234dd3da95dff51fd88fbd1deb94694c118a8c05c9c5375a5a962&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=gostevoy-dom-keruen-Ym7%2AAgEfLub0ztA_LrcvagS205974371460%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-136616958512%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQOziV2eqaTGwzdABpFoflYipWACsyRScnoqnBbwkS_ptuwuhXwNqqhoC79wQAvD_BwE&highlighted_hotels=1351538&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "atyrau-dastan",
+      name: "Atyrau Dastan Hotel",
+      city: "Atyrau",
+      stars: 0,
+      area: "Орталыққа жақын",
+      address: "Атырау қаласы",
+      desc: "Орталыққа жақын орналасу, жолға ыңғайлы. Қысқа сапарға жақсы нұсқа.",
+      highlights: ["Орталыққа жақын", "Таңғы ас", "Тұрақ"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/145473939.jpg?k=256b487747c9963ab94fd1ae0c292f0fe990f72a2ebe995dc56c162209768e3e&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=atyrau-hotel-vTduGzEFIzsh2rfVKbL_egS467058512304%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-33102712094%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQKU3Ri0cOFeA9v8i9hOsRBP_uGE6WEZKXX9sr4sydQz-1Oe8dXK0jBoCUNsQAvD_BwE&highlighted_hotels=357303&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "sultan-palace-atyrau",
+      name: "Sultan Palace Hotel",
+      city: "Atyrau",
+      stars: 0,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "Классикалық стильдегі қонақүй. Сервисі жақсы, түрлі бөлме түрлері бар.",
+      highlights: ["Комфорт", "Сервис", "Wi-Fi"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/101171116.jpg?k=9c327db9528aa676df33a0e89648a6bc66891bd341d6b7f999afbe2bb14b5f06&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=311984&label=sultan-palace-UTR9Uhm38xonmOJm0MdCWQS393162409373%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-413253496065%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YbSsBl3MCvHsD8UKUHIRFxY&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQBFRBP0WkJHU5HGVKL-n307psKeMAh0GLhCadcsEWHzIhK6usBZILBoCb3oQAvD_BwE&highlighted_hotels=2281125&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "apec-atyrau",
+      name: "Apec Hotel",
+      city: "Atyrau",
+      stars: 3,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "3★ қонақүй: баға/сапа қатынасы жақсы, жол-жөнекей тоқтауға ыңғайлы.",
+      highlights: ["3★", "Қолжетімді", "Таңғы ас"],
+      image: "https://avatars.mds.yandex.net/get-altay/6314780/2a00000182359b6da174c490481941cffc75/L_height",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=apec-tc-qUnniaqVb_wjN9zRcOvvtQS594325140214%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-322905397874%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQN0X5rDEdPRebP-gYklMNEKbdZBY0Xd6W8kbx8GUopLVNxHkDqGB5hoCP0oQAvD_BwE&highlighted_hotels=7900221&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=without_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "atb-grand-atyrau",
+      name: "ATB Grand Hotel",
+      city: "Atyrau",
+      stars: 4,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "4★ қонақүй: фитнес/мейрамхана секілді опциялар кездеседі.",
+      highlights: ["4★", "Фитнес", "Мейрамхана"],
+      image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/a2/01/7a/atb-grand-hotel.jpg?w=900&h=500&s=1",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=atb-grand-atyrau-bhXB49oA4pmDa1VRP_XxhAS589541772462%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-315954218088%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQGdgL0kA25cIyTbInkWk0UyuPYHULbSzC5MRAgzrmvu47HHORYBU6xoCbKMQAvD_BwE&highlighted_hotels=7889805&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "infinity-plaza-1",
+      name: "INFINITY PLAZA BLOCK 1",
+      city: "Atyrau",
+      stars: 4,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "4★ формат: бассейн/SPA сияқты опциялар болуы мүмкін (нақтысын бронь парағынан тексер).",
+      highlights: ["4★", "Комфорт", "Қызмет көрсету"],
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVxnAUKY7RhOuy9-OvG8BrjmRk1vSlq5nLPQ&s",
+      map: "https://www.booking.com/hotel/kz/infinity-plaza-block-1.ru.html"
+    },
+    {
+      id: "sulo-atyrau",
+      name: "SULO Atyrau Hotel",
+      city: "Atyrau",
+      stars: 3,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "3★ қонақүй: отбасылық бөлмелер, базалық сервис, қалалық формат.",
+      highlights: ["3★", "Отбасылық", "Wi-Fi"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/231159496.jpg?k=6ac489c1b75f5445f691f571496a243fcc7b1a944d6d2a27c8d2374bb91aec4b&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=311984&label=sulo-atyrau-ichMhYEmQOv4bMvcbs7SpQS589037064885%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-1930851150907%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YXORK0YJiVoOxcWODxYDaAA&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQDZer2LEhA9ZGLjej43GXRPjfpQ1GJdewKOz1RmvnPckLsdzy4itMBoCGLwQAvD_BwE&highlighted_hotels=5897456&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "renaissance-by-crystall",
+      name: "Renaissance by Crystall",
+      city: "Atyrau",
+      stars: 0,
+      area: "Орталық",
+      address: "Атырау қаласы",
+      desc: "Қаланың орталығындағы заманауи қонақүй форматы. Іскерлік сапарға ыңғайлы.",
+      highlights: ["Орталық", "Комфорт", "Бизнес"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/626896879.jpg?k=6652ec7308e4046cad694c3736196c019bb34058c67f00cae6b879c2ce604a06&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=356980&label=gog235jc-10CAsogAFCEnJlbmFpc3NhbmNlLWF0eXJhdUghWANogAGIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AoDetsoGwAIB0gIkYmEyMjZmYTEtMzM3MC00ZGI4LTk1N2QtZmY1YTYwZTg0ODNj2AIB4AIB&highlighted_hotels=474914&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=user_sh&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "tengri-atyrau",
+      name: "Tengri Hotel (Atyrau)",
+      city: "Atyrau",
+      stars: 0,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "Қалалық формат: жолға ыңғайлы, қолжетімді варианттардың бірі.",
+      highlights: ["Қолжетімді", "Таза", "Wi-Fi"],
+      image: "https://www.apartamenty.kz/images/big/hotel/460/39071b3c3a9ab53ebb38e160607ad3f4.jpg",
+      map: "https://www.booking.com/searchresults.ru.html?aid=315714&label=tengri-atyrau-sD9uUnVmGaNwLYyw1AWorgS176111153921%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-26678235296%3Alp9198010%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YROH_CMrg4mphqhBewukT84&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQPV0juf26La6ptFpYm_KpK1qC1BiQ369UO89KqHU-sub9-7LQJmCrRoCUccQAvD_BwE&highlighted_hotels=373380&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=with_av&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    },
+    {
+      id: "river-palace-atyrau",
+      name: "River Palace Hotel (Atyrau)",
+      city: "Atyrau",
+      stars: 0,
+      area: "Қала ішінде",
+      address: "Атырау қаласы",
+      desc: "Жоғары деңгейлі форматтағы қонақүй нұсқасы. Сервис пен комфортқа бағытталған.",
+      highlights: ["Комфорт", "Сервис", "Бизнес"],
+      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/284104426.jpg?k=2e7278c6672e5a7d195fdfba4eb8a33b677e19feb1310b8b0c8afa9ba3a52339&o=",
+      map: "https://www.booking.com/searchresults.ru.html?aid=356980&label=gog235jc-10CAsogAFCDHJpdmVyLXBhbGFjZUghWANogAGIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AtDetsoGwAIB0gIkMzBlNGJjYmEtZTJlYi00NWMyLTk1NDQtZWQ1MjQ4NjVlZmZh2AIB4AIB&highlighted_hotels=400907&checkin=2025-12-30&redirected=1&city=-2334555&hlrd=user_sh&source=hotel&checkout=2025-12-31&keep_landing=1&sid=dbb9d96fed7828dbb8a5ef2f31eaf240"
+    }
+  ];
+
+  const grid = document.getElementById("grid");
+  const empty = document.getElementById("empty");
+  const qEl = document.getElementById("q");
+  const cityEl = document.getElementById("city");
+  const starsEl = document.getElementById("stars");
+  const countNote = document.getElementById("countNote");
+
+  function esc(s){
+    return String(s || "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function starsText(n){
+    if(!n || Number(n) === 0) return "Жұлдызы көрсетілмеген";
+    return `${n}★`;
+  }
+
+  function render(){
+    const q = (qEl.value || "").trim().toLowerCase();
+    const city = cityEl.value;
+    const stars = starsEl.value;
+
+    const filtered = HOTELS.filter(h => {
+      if(city !== "all" && h.city !== city) return false;
+
+      if(stars !== "all"){
+        if(stars === "0"){
+          if(h.stars && h.stars !== 0) return false;
+        } else {
+          if(Number(h.stars) !== Number(stars)) return false;
+        }
+      }
+
+      if(q){
+        const hay = `${h.name} ${h.city} ${h.area} ${h.address} ${h.desc} ${(h.highlights||[]).join(" ")}`.toLowerCase();
+        if(!hay.includes(q)) return false;
+      }
+
+      return true;
+    });
+
+    grid.innerHTML = filtered.map(h => `
+      <article class="hotelCard">
+        <img class="hotelCard__img" src="${esc(h.image)}" alt="${esc(h.name)}"
+             onerror="this.style.display='none'">
+        <div class="hotelCard__body">
+          <div class="hotelCard__top">
+            <div>
+              <div class="hotelCard__name">${esc(h.name)}</div>
+              <div class="hotelCard__meta">${esc(h.city)} • ${esc(h.area || "—")} • ${esc(starsText(h.stars))}</div>
+            </div>
+            <div class="pill">${esc(h.city)}</div>
+          </div>
+
+          <p class="hotelCard__desc">${esc(h.desc || "")}</p>
+
+          <div class="hotelCard__meta"><b>Мекенжай:</b> ${esc(h.address || "—")}</div>
+
+          ${
+            (h.highlights && h.highlights.length)
+              ? `<ul class="hotelCard__list">${h.highlights.slice(0,4).map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+              : ``
+          }
+
+          <div class="hotelCard__actions">
+            <a class="btnSmall btnSmall--primary" href="${esc(h.map || "#")}" target="_blank" rel="noopener">Қарау →</a>
+          </div>
+        </div>
+      </article>
+    `).join("");
+
+    empty.style.display = filtered.length ? "none" : "block";
+    countNote.textContent = `Табылды: ${filtered.length}`;
+  }
+
+  qEl.addEventListener("input", render);
+  cityEl.addEventListener("change", render);
+  starsEl.addEventListener("change", render);
+
+  render();
+</script>
+
+</body>
+</html>
